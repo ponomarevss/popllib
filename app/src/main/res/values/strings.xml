@@ -3,4 +3,5 @@
     <string name="counter_one">counter_one</string>
     <string name="counter_two">counter_two</string>
     <string name="counter_three">counter_three</string>
+    <string name="user_screen_login">login</string>
 </resources>
