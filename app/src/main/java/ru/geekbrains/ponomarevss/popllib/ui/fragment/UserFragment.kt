@@ -27,17 +27,17 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     val presenter by moxyPresenter {
-        val user = arguments?.getParcelable<GithubUser>(USER)
+        val user = arguments?.getParcelable<GithubUser>(USER) as GithubUser
         UserPresenter(App.instance.router, user)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         View.inflate(context, R.layout.fragment_user, null)
 
-    override fun init() {
-        tv_login.text = presenter.user?.login
-    }
-
     override fun backPressed() = presenter.backClick()
+
+    override fun setLogin(text: String) {
+        tv_login.text = text
+    }
 
 }
