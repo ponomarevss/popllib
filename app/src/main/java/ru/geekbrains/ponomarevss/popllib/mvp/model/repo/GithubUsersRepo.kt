@@ -1,5 +1,6 @@
 package ru.geekbrains.ponomarevss.popllib.mvp.model.repo
 
+import io.reactivex.rxjava3.core.Observable
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.GithubUser
 
 class GithubUsersRepo {
@@ -12,7 +13,12 @@ class GithubUsersRepo {
         GithubUser("login6")
     )
 
-    fun getUsers() : List<GithubUser> {
-        return repositories
+    fun getUsers(): Observable<GithubUser> = Observable.create {emitter ->
+        repositories.forEach{
+            emitter.onNext(it)
+        }
     }
+
+//    fun getUsers(): Observable<GithubUser> = Observable.fromIterable(repositories)
+
 }
