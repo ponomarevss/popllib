@@ -39,12 +39,11 @@ class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPr
     }
 
     private fun loadData() {
-        usersListPresenter.users.clear()
         usersRepo.getUsers().subscribe{
-        usersListPresenter.users.add(it)
+            usersListPresenter.users.clear()
+            usersListPresenter.users.addAll(it)
         viewState.updateUsersList()
         }
-//        val users = usersRepo.getUsers()
     }
 
     fun backClick(): Boolean {
