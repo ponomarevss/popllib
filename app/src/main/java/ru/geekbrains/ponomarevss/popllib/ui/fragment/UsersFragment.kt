@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_users.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.ponomarevss.popllib.R
-import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.GithubUsersRepo
+import ru.geekbrains.ponomarevss.popllib.mvp.model.api.ApiHolder
+import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.RetrofitGithubUsersRepo
 import ru.geekbrains.ponomarevss.popllib.mvp.presenter.UsersPresenter
 import ru.geekbrains.ponomarevss.popllib.mvp.view.UsersView
 import ru.geekbrains.ponomarevss.popllib.ui.App
@@ -23,7 +25,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     val presenter by moxyPresenter {
-        UsersPresenter(App.instance.router, GithubUsersRepo())
+        UsersPresenter(AndroidSchedulers.mainThread(), App.instance.router, RetrofitGithubUsersRepo(ApiHolder.api))
     }
 
     val adapter by lazy {

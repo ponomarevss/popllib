@@ -1,15 +1,20 @@
 package ru.geekbrains.ponomarevss.popllib.mvp.presenter
 
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.GithubUser
-import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.GithubUsersRepo
+import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.RetrofitGithubUsersRepo
 import ru.geekbrains.ponomarevss.popllib.mvp.presenter.list.IUsersListPresenter
 import ru.geekbrains.ponomarevss.popllib.mvp.view.UsersView
 import ru.geekbrains.ponomarevss.popllib.mvp.view.list.UserItemView
 import ru.geekbrains.ponomarevss.popllib.navigation.Screens
 import ru.terrakok.cicerone.Router
 
-class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPresenter<UsersView>() {
+class UsersPresenter(
+    val mainThreadScheduler: Scheduler,
+    val router: Router,
+    val retrofitGithubUsersRepo: RetrofitGithubUsersRepo
+    ) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUsersListPresenter {
         override var itemClickListener: ((UserItemView) -> Unit)? = null
@@ -22,7 +27,6 @@ class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPr
         }
 
         override fun getCount() = users.size
-
     }
 
     val usersListPresenter = UsersListPresenter()
@@ -39,11 +43,15 @@ class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPr
     }
 
     private fun loadData() {
-        usersRepo.getUsers().subscribe{
+        retrofitGithubUsersRepo.getUsers()
+            .observeOn(mainThreadScheduler)
+            .subscribe({list ->
             usersListPresenter.users.clear()
-            usersListPresenter.users.addAll(it)
-        viewState.updateUsersList()
-        }
+            usersListPresenter.users.addAll(list)
+            viewState.updateUsersList()
+        }, {
+            println("Error: ${it.message}")
+        })
     }
 
     fun backClick(): Boolean {
