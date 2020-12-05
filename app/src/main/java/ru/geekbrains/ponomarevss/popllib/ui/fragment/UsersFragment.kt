@@ -17,6 +17,7 @@ import ru.geekbrains.ponomarevss.popllib.mvp.view.UsersView
 import ru.geekbrains.ponomarevss.popllib.ui.App
 import ru.geekbrains.ponomarevss.popllib.ui.BackButtonListener
 import ru.geekbrains.ponomarevss.popllib.ui.adapter.UsersRvAdapter
+import ru.geekbrains.ponomarevss.popllib.ui.image.GlideImageLoader
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
@@ -29,7 +30,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     val adapter by lazy {
-        UsersRvAdapter(presenter.usersListPresenter)
+        UsersRvAdapter(presenter.usersListPresenter, GlideImageLoader())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

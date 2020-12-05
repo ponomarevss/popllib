@@ -4,20 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
+import kotlinx.android.synthetic.main.fragment_user.iv_avatar
+import kotlinx.android.synthetic.main.fragment_user.tv_login
+import kotlinx.android.synthetic.main.item_user.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.ponomarevss.popllib.R
 import ru.geekbrains.ponomarevss.popllib.mvp.model.api.ApiHolder
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.GithubUser
+import ru.geekbrains.ponomarevss.popllib.mvp.model.image.IImageLoader
 import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.RetrofitGithubRepositoriesRepo
 import ru.geekbrains.ponomarevss.popllib.mvp.presenter.UserPresenter
 import ru.geekbrains.ponomarevss.popllib.mvp.view.UserView
 import ru.geekbrains.ponomarevss.popllib.ui.App
 import ru.geekbrains.ponomarevss.popllib.ui.BackButtonListener
 import ru.geekbrains.ponomarevss.popllib.ui.adapter.RepositoriesRvAdapter
+import ru.geekbrains.ponomarevss.popllib.ui.image.GlideImageLoader
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
@@ -54,6 +60,11 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     override fun setLogin(text: String) {
         tv_login.text = text
+    }
+
+    override fun loadImage(url: String) {
+        val imageLoader: IImageLoader<ImageView> = GlideImageLoader()
+        imageLoader.loadInto(url, iv_avatar)
     }
 
     override fun backPressed() = presenter.backClick()

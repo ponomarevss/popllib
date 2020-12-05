@@ -29,7 +29,7 @@ class RepositoriesRvAdapter(val presenter: IRepositoriesListPresenter) : Recycle
 
     override fun getItemCount() = presenter.getCount()
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), RepositoryItemView, LayoutContainer {
+    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), RepositoryItemView, LayoutContainer {
         override fun setName(text: String) = with(containerView) {
             tv_name.text = text
         }

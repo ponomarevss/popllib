@@ -38,6 +38,7 @@ class UserPresenter(
         super.onFirstViewAttach()
         viewState.init()
         viewState.setLogin(user.login)
+        user.avatarUrl?.let { viewState.loadImage(it) }
         loadData()
     }
 

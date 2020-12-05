@@ -9,4 +9,5 @@ interface UserView: MvpView {
     fun init()
     fun updateRepositoriesList()
     fun setLogin(text : String)
+    fun loadImage(url: String)
 }
