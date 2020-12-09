@@ -3,6 +3,7 @@ package ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.dao
 import androidx.room.*
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.RoomGithubRepository
 
+@Dao
 interface GithubRepositoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

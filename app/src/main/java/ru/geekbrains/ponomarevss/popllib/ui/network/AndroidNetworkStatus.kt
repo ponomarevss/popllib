@@ -2,7 +2,8 @@ package ru.geekbrains.ponomarevss.popllib.ui.network
 
 import android.content.Context
 import android.net.ConnectivityManager
-import io.reactivex.rxjava3.core.Observable
+import android.net.Network
+import android.net.NetworkRequest
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ru.geekbrains.ponomarevss.popllib.mvp.model.network.INetworkStatus
@@ -13,14 +14,20 @@ class AndroidNetworkStatus(context: Context): INetworkStatus {
 
     init {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val request = NetworkRequest.Builder().build()
+        connectivityManager.registerNetworkCallback(request, object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                statusSubject.onNext(true)
+            }
+
+            override fun onLost(network: Network) {
+                statusSubject.onNext(false)
+            }
+        })
     }
 
-    override fun isOnline(): Observable<Boolean> {
-        TODO("Not yet implemented")
-    }
+    override fun isOnline() = statusSubject
 
-    override fun isOnlineSingle(): Single<Boolean> {
-        TODO("Not yet implemented")
-    }
+    override fun isOnlineSingle(): Single<Boolean> = statusSubject.first(false)
 
 }

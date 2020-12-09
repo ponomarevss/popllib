@@ -3,6 +3,7 @@ package ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.dao
 import androidx.room.*
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.RoomGithubUser
 
+@Dao
 interface GithubUserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -36,5 +37,5 @@ interface GithubUserDao {
     fun getAll() : List<RoomGithubUser>
 
     @Query("SELECT * FROM RoomGithubUser WHERE login = :login LIMIT 1")
-    fun findByLogin(login: String): RoomGithubUser
+    fun findByLogin(login: String): RoomGithubUser?
 }

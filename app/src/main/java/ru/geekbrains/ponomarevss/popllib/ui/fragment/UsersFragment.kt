@@ -11,6 +11,8 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.ponomarevss.popllib.R
 import ru.geekbrains.ponomarevss.popllib.mvp.model.api.ApiHolder
+import ru.geekbrains.ponomarevss.popllib.mvp.model.cache.RoomCache
+import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.db.Database
 import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.RetrofitGithubUsersRepo
 import ru.geekbrains.ponomarevss.popllib.mvp.presenter.UsersPresenter
 import ru.geekbrains.ponomarevss.popllib.mvp.view.UsersView
@@ -18,6 +20,7 @@ import ru.geekbrains.ponomarevss.popllib.ui.App
 import ru.geekbrains.ponomarevss.popllib.ui.BackButtonListener
 import ru.geekbrains.ponomarevss.popllib.ui.adapter.UsersRvAdapter
 import ru.geekbrains.ponomarevss.popllib.ui.image.GlideImageLoader
+import ru.geekbrains.ponomarevss.popllib.ui.network.AndroidNetworkStatus
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
@@ -26,7 +29,10 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     val presenter by moxyPresenter {
-        UsersPresenter(AndroidSchedulers.mainThread(), App.instance.router, RetrofitGithubUsersRepo(ApiHolder.api))
+        UsersPresenter(
+            AndroidSchedulers.mainThread(),
+            App.instance.router,
+            RetrofitGithubUsersRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), RoomCache(Database.getInstance())))
     }
 
     val adapter by lazy {

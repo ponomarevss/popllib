@@ -15,7 +15,9 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.geekbrains.ponomarevss.popllib.R
 import ru.geekbrains.ponomarevss.popllib.mvp.model.api.ApiHolder
+import ru.geekbrains.ponomarevss.popllib.mvp.model.cache.RoomCache
 import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.GithubUser
+import ru.geekbrains.ponomarevss.popllib.mvp.model.entity.room.db.Database
 import ru.geekbrains.ponomarevss.popllib.mvp.model.image.IImageLoader
 import ru.geekbrains.ponomarevss.popllib.mvp.model.repo.RetrofitGithubRepositoriesRepo
 import ru.geekbrains.ponomarevss.popllib.mvp.presenter.UserPresenter
@@ -24,6 +26,7 @@ import ru.geekbrains.ponomarevss.popllib.ui.App
 import ru.geekbrains.ponomarevss.popllib.ui.BackButtonListener
 import ru.geekbrains.ponomarevss.popllib.ui.adapter.RepositoriesRvAdapter
 import ru.geekbrains.ponomarevss.popllib.ui.image.GlideImageLoader
+import ru.geekbrains.ponomarevss.popllib.ui.network.AndroidNetworkStatus
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
@@ -39,7 +42,12 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     val presenter by moxyPresenter {
         val user = arguments?.getParcelable<GithubUser>(USER) as GithubUser
-        UserPresenter(AndroidSchedulers.mainThread(), App.instance.router, user, RetrofitGithubRepositoriesRepo(ApiHolder.api))
+        UserPresenter(
+            AndroidSchedulers.mainThread(),
+            App.instance.router,
+            user,
+            RetrofitGithubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()), RoomCache(Database.getInstance()))
+        )
     }
 
     val adapter by lazy {

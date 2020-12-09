@@ -16,5 +16,6 @@ class RoomGithubRepository(
     @PrimaryKey var id: String,
     var name: String,
     var forksCount: String,
+    var fullName: String,
     var userId: String
 )

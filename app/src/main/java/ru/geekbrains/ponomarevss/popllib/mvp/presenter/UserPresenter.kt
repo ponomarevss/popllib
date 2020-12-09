@@ -24,8 +24,8 @@ class UserPresenter(
 
         override fun bindView(view: RepositoryItemView) {
             val repository = repositories[view.pos]
-            view.setName(repository.name)
-            view.setForksCount(repository.forksCount.toString())
+            repository.name?.let { view.setName(it) }
+            repository.forksCount?.let { view.setForksCount(it) }
         }
 
         override fun getCount() = repositories.size
@@ -37,13 +37,13 @@ class UserPresenter(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        viewState.setLogin(user.login)
+        user.login?.let { viewState.setLogin(it) }
         user.avatarUrl?.let { viewState.loadImage(it) }
         loadData()
     }
 
     private fun loadData() {
-        retrofitGithubRepositoriesRepo.getRepos(user.reposUrl)
+        retrofitGithubRepositoriesRepo.getRepositories(user)
             .observeOn(mainThreadScheduler)
             .subscribe({list ->
                 repositoriesListPresenter.repositories.clear()
